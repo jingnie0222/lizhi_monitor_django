@@ -7,14 +7,16 @@ import time, json
 import requests
 import sys
 from bs4 import BeautifulSoup
+# from utils.verify import auth
 import difflib
 import re
 
 # @auth
-
 def debug(request):
+    user_id='yinjingjing'
+    # user_id = request.COOKIES.get('uid')
     if request.method == 'GET':
-        return render(request, 'tupuqo/debug.html')
+        return render(request, 'tupuqo/debug.html',{'user_id': user_id})
 
     elif request.method == 'POST':
         ret = {

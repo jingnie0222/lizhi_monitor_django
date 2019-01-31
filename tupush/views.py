@@ -7,30 +7,16 @@ import time, json
 import requests
 import sys
 from bs4 import BeautifulSoup
+# from utils.verify import auth
 import difflib
 import re,traceback
 
 
 # Create your views here.
-# def auth(func):
-#     def inner(request, *args, **kwargs):
-#         login_url = "https://login.sogou-inc.com/?appid=1220&sso_redirect=http://webqa.web.sjs.ted/login&targetUrl="
-#         try:
-#             user_id = request.COOKIES.get('uid')
-#             if not user_id:
-#                 return redirect(login_url)
-#         except:
-#             return redirect(login_url)
-#         return func(request, *args, **kwargs)
-#
-#     return inner
-#
-#
-# # @auth
-
+# @auth
 def debug(request):
-    #user_id = "zhangjingjun"
-    #user_id = request.COOKIES.get('uid')
+    user_id = "yinjingjing"
+    # user_id = request.COOKIES.get('uid')
     if request.method == 'GET':
         # page = request.GET.get('page')
         # current_page = 1
@@ -45,7 +31,7 @@ def debug(request):
         # except Exception as e:
         #     print(e)
         #     pass
-        return render(request, 'tupush/debug.html')
+        return render(request, 'tupush/debug.html',{'user_id': user_id})
 
     elif request.method == 'POST':
         ret = {
