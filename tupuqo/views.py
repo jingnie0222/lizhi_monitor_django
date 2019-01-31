@@ -42,19 +42,20 @@ def debug(request):
 
         try:
             resp = requests.post(inputHost, data=params_utf16, headers=headers, timeout=3)
+            # print(resp.text)
             status = resp.reason
             if status != 'OK':
-                print(sys.stderr, query, status)
+                # print(sys.stderr, query, status)
                 ret['error'] = 'Error:未知的请求类型'
                 ret['status'] = False
                 return ret
 
-            data = BeautifulSoup(resp.content.decode('utf-16le'))
+            data = BeautifulSoup(resp.content.decode('utf-16le'),"html.parser")
             ret['data'] = data.prettify()
 
         except Exception as e:
-            print(e)
-            print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+            # print(e)
+            # print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
             ret['error'] = "Error:" + str(e)
             ret['status'] = False
         return HttpResponse(json.dumps(ret))
@@ -108,13 +109,13 @@ def debug_diff(request):
         status_diff = resp_diff.reason
 
         if status != 'OK' or status_diff != 'OK':
-            print(sys.stderr, query, status, status_diff)
+            # print(sys.stderr, query, status, status_diff)
             ret['error'] = 'Error:未知的请求类型'
             ret['status'] = False
             return ret
 
-        data = BeautifulSoup(resp.content.decode('utf-16le'))
-        data_diff = BeautifulSoup(resp_diff.content.decode('utf-16le'))
+        data = BeautifulSoup(resp.content.decode('utf-16le'),"html.parser")
+        data_diff = BeautifulSoup(resp_diff.content.decode('utf-16le'),"html.parser")
 
         diff = difflib.HtmlDiff()
 
@@ -122,8 +123,8 @@ def debug_diff(request):
             'nowrap="nowrap"', '')
 
     except Exception as e:
-        print(e)
-        print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+        # print(e)
+        # print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
         ret['error'] = "Error:" + str(e)
         ret['status'] = False
     return HttpResponse(json.dumps(ret))
@@ -152,7 +153,7 @@ def debug_save(request):
         ret['query'] = query
     except Exception as e:
         ret['error'] = "Error:" + str(e)
-        print(e)
+        # print(e)
         ret['status'] = False
     return HttpResponse(json.dumps(ret))
 
@@ -170,7 +171,7 @@ def debug_del(request):
     except Exception as e:
         ret['status'] = False
         ret['error'] = "Error:" + str(e)
-        print(e)
+        # print(e)
     return HttpResponse(json.dumps(ret))
 
 

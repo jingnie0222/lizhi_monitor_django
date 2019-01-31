@@ -8,7 +8,7 @@ import requests
 import sys
 from bs4 import BeautifulSoup
 import difflib
-import re
+import re,traceback
 
 
 # Create your views here.
@@ -82,17 +82,17 @@ def debug(request):
             resp = requests.post(inputHost, data=params_gbk, headers=headers, timeout=3)
             status = resp.reason
             if status != 'OK':
-                print(sys.stderr, query, status)
+                # print(sys.stderr, query, status)
                 ret['error'] = 'Error:未知的请求类型'
                 ret['status'] = False
                 return ret
 
-            data = BeautifulSoup(resp.text, "html.parser")
+            data = BeautifulSoup(resp.text,"html.parser")
             ret['data'] = data.prettify()
 
         except Exception as e:
-            print(e)
-            print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+            # print(e)
+            # print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
             ret['error'] = "Error:" + str(e)
             ret['status'] = False
         return HttpResponse(json.dumps(ret))
@@ -168,17 +168,17 @@ def debug_diff(request):
         status_diff = resp_diff.reason
 
         if status != 'OK' or status_diff != 'OK':
-            print(sys.stderr, query, status, status_diff)
+            # print(sys.stderr, query, status, status_diff)
             ret['error'] = 'Error:未知的请求类型'
             ret['status'] = False
             return ret
 
-        total = BeautifulSoup(resp.text, "html.parser")
-        total_diff = BeautifulSoup(resp_diff.text, "html.parser")
+        total = BeautifulSoup(resp.text,"html.parser")
+        total_diff = BeautifulSoup(resp_diff.text,"html.parser")
 
-        jzwd = jzwd_diff = BeautifulSoup("精准问答结果为空", "html.parser")
-        rec = rec_diff = BeautifulSoup("右侧推荐结果为空", "html.parser")
-        int = int_diff = BeautifulSoup("兴趣推荐结果为空", "html.parser")
+        jzwd = jzwd_diff = BeautifulSoup("精准问答结果为空","html.parser")
+        rec = rec_diff = BeautifulSoup("右侧推荐结果为空","html.parser")
+        int = int_diff = BeautifulSoup("兴趣推荐结果为空","html.parser")
 
         for doc in total.find_all('doc'):
             pvtype = doc.item['pvtype']
@@ -219,8 +219,9 @@ def debug_diff(request):
 
 
     except Exception as e:
-        print(e)
-        print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+        traceback.print_exc()
+        # print(e)
+        # print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
         ret['error'] = "Error:" + str(e)
         ret['status'] = False
     return HttpResponse(json.dumps(ret))
@@ -249,7 +250,7 @@ def debug_save(request):
         ret['query'] = query
     except Exception as e:
         ret['error'] = "Error:" + str(e)
-        print(e)
+        # print(e)
         ret['status'] = False
     return HttpResponse(json.dumps(ret))
 
@@ -267,7 +268,7 @@ def debug_del(request):
     except Exception as e:
         ret['status'] = False
         ret['error'] = "Error:" + str(e)
-        print(e)
+        # print(e)
     return HttpResponse(json.dumps(ret))
 
 
