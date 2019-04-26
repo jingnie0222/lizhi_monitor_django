@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.forms.models import model_to_dict
-from webqo import models
+from lizhi import models
 from utils import pagination
 from utils import urlhandle
 import time, json
@@ -8,22 +8,26 @@ import requests
 import sys
 from bs4 import BeautifulSoup
 import difflib
+import pysnooper
 import re
 
 
 # Create your views here.
-def auth(func):
-    def inner(request, *args, **kwargs):
-        login_url = "https://login.sogou-inc.com/?appid=1220&sso_redirect=http://webqa.web.sjs.ted/login&targetUrl="
-        try:
-            user_id = request.COOKIES.get('uid')
-            if not user_id:
-                return redirect(login_url)
-        except:
-            return redirect(login_url)
-        return func(request, *args, **kwargs)
-
-    return inner
+@pysnooper.snoop()
+def lizhiHome(request):
+    if request.method == 'GET':
+        page_id = request.GET.get('page','')
+        if page_id == '':
+            current_page = 1
+        else:
+            current_page = int(page_id)
+        print('current_page',current_page)
+        allTast = models.Task.objects.order_by('-task_id')
+        page_obj = pagination.Page(current_page, len(allTast), 16, 9)
+        data = allTast[page_obj.start:page_obj.end]
+        page_str = page_obj.page_str("/lizhi/home?page=")
+        print(page_str)
+        return render(request,'lizhi/lizhi_home.html',{'li':data,'page_str':page_str})
 
 
 # @auth
