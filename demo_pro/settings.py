@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['10.144.96.115','127.0.0.1','10.129.152.73',]
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,7 +41,11 @@ INSTALLED_APPS = [
     'webqo.apps.WebqoConfig',
     'tupush.apps.TupushConfig',
     'tupuqo.apps.TupuqoConfig',
+    'lizhi.apps.LizhiConfig',
+
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,10 +92,10 @@ WSGI_APPLICATION = 'demo_pro.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sogowebqa',
+        'NAME': 'lizhimonitor',
         'USER': 'root',
-        'PASSWORD': 'Websearch@qa66',
-        'HOST': '10.144.120.30',
+        'PASSWORD': 'lzxg@webqa',
+        'HOST': '10.144.96.115',
         'PORT': '3306',
         'OPTIONS': {
             'autocommit': True,

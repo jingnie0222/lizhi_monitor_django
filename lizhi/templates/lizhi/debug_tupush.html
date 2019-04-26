@@ -1,0 +1,338 @@
+{% extends 'main.html' %}
+{% block content %}
+    {% load static %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <h3 class="tile-title">请求调试&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:15px;"
+                                                                       id="error_xml"></span></h3>
+                    <form class="row" id="form_xml" action="." method="POST">
+                        {% csrf_token %}
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Single:</label>
+                            <input class="form-control" type="text" id="inputHost" name="inputHost"
+                                   value="http://cache01.tupu.djt.ted:5555">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">&nbsp;</label>
+                            <input class="form-control" type="text" id="forceQuery" name="forceQuery"
+                                   placeholder="forceQuery,值为0或1,默认为0">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">&nbsp;</label>
+                            <input class="form-control" type="text" id="query_from" name="query_from"
+                                   placeholder="from,值为web或wap,默认为web">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Diff:</label>
+                            <input class="form-control" type="text" id="inputHost_diff" name="inputHost_diff"
+                                   value="http://cache01.tupu.1.djt.ted:5555">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">&nbsp;</label>
+                            <input class="form-control" type="text" id="forceQuery_diff" name="forceQuery_diff"
+                                   placeholder="forceQuery,值为0或1,默认为0">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">&nbsp;</label>
+                            <input class="form-control" type="text" id="query_from_diff" name="query_from_diff"
+                                   placeholder="from,值为web或wap,默认为web">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <textarea class="form-control" rows="4" id="query" name="query" placeholder="请求"
+                        ></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="tile-footer">
+                    <button class="btn btn-primary" id="start_debug" type="button"><i
+                            class="fa fa-fw fa-lg fa-check-circle"></i>开始调试
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-primary" id="start_diff" type="button"><i
+                            class="fa fa-fw fa-lg fa-check-circle"></i>diff
+                    </button>
+                </div>
+
+            </div>
+            <div class="tile">
+                <h3 class="tile-title">列表</h3>
+                <!--<div class="tile" style="height: 690px;overflow-y: scroll">-->
+                <div class="bs-component" id="diff">
+	              <ul class="nav nav-tabs">
+	                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#all_diff">All</a></li>
+	                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#accurate_diff">精准问答</a></li>
+	                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#right_diff">右侧推荐</a></li>
+	                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#interest_diff">兴趣推荐</a></li>
+	              </ul>
+	              <div class="tab-content" id="myTabContent">
+	                <div class="tab-pane fade active show" id="all_diff">
+	                  <div id="result_diff"></div>
+	                </div>
+	                <div class="tab-pane fade" id="accurate_diff">
+	                  <div id="jzwd_result"></div>
+	                </div>
+	                <div class="tab-pane fade" id="right_diff">
+	                  <div id="rec_result"></div>
+	                </div>
+	                <div class="tab-pane fade" id="interest_diff">
+	                  <div id="int_result"></div>
+	                </div>
+	              </div>
+	            </div>
+	            <div id="res" class="">
+	                  <textarea class="form-control" rows="27" id="result" name="result"></textarea>
+	            </div>
+            </div>
+        </div
+
+
+        <div class="col-md-12">
+            
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-6">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        //判断ajax里面的方法是get还是post
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        //只要执行一次ajaxSetup进行header设置,就可以不用在没个ajax里面添加header信息了
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'))
+                }
+            }
+        });
+        //save
+        $('#save_debug').click(function () {
+            var inputHost = $('#inputHost').val()
+            var inputExpId = $('#inputExpId').val()
+            var query_from = $('#query_from').val()
+            var query = $('#query').val()
+
+            if (query != "" && inputHost != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/webqo/debug/save",
+                    async: true,
+                    traditional: true,
+                    data: {
+                        'inputHost': inputHost,
+                        'inputExpId': inputExpId,
+                        'query_from': query_from,
+                        'query': query
+                    },
+                    dataType: 'JSON',
+                    success: function (obj) {
+                        if (obj.status) {
+                            location.reload();
+                        } else {
+                            $('#error_xml').text(obj.error);
+                        }
+                    },
+                    error: function () {
+
+                    },
+                });
+                $('#error_xml').text('');
+            } else {
+                if (query == '') {
+                    $('#error_xml').text('Request不可为空。');
+                } else if (inputHost == '') {
+                    $('#error_xml').text('Host不可为空。');
+                } else {
+                    $('#error_xml').text('未知错误。');
+                }
+            }
+        })
+
+        //query
+        $('#start_debug').click(function () {
+            var query = $('#query').val()
+            var inputHost = $('#inputHost').val()
+            var query_from = $('#query_from').val()
+            var forceQuery = $('#forceQuery').val()
+			$('#diff').addClass('hide');
+			$('#res').removeClass('hide');
+			$('#result').text('');
+			$('#result_diff').html("")
+            $('#jzwd_result').html("")
+            $('#rec_result').html("")
+            $('#int_result').html("")
+            if (query != "" && inputHost != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/webqo/debug/",
+                    async: true,
+                    traditional: true,
+                    data: $('#form_xml').serialize(),
+                    dataType: 'JSON',
+                    success: function (ret) {
+                        if (ret.status) {                        	
+//                          $('#result').show();
+                            $('#result').text(ret.data);
+                        } else {
+                            $('#error_xml').text(ret.error)
+
+                        }
+
+                    },
+                    error: function () {
+
+                    },
+                });
+                $('#error_xml').text('');
+            } else {
+                if (query == '') {
+                    $('#error_xml').text('Request不可为空');
+                } else if (inputHost == '') {
+                    $('#error_xml').text('Host不可为空');
+                } else {
+                    $('#error_xml').text('未知错误');
+                }
+            }
+        })
+
+        //diff
+        $('#start_diff').click(function () {
+            var query = $('#query').val()
+
+            var inputHost = $('#inputHost').val()
+            var forceQuery = $('#forceQuery').val()
+            var query_from = $('#query_from').val()
+
+            var inputHost_diff = $('#inputHost_diff').val()
+            var forceQuery_diff = $('#forceQuery_diff').val()
+            var query_from_diff = $('#query_from_diff').val()
+			$('#res').addClass('hide');
+			$('#diff').removeClass('hide');
+			$('#result').text('');
+			$('#result_diff').html("")
+            $('#jzwd_result').html("")
+            $('#rec_result').html("")
+            $('#int_result').html("")
+            if (query != "" && inputHost != "" && inputHost_diff != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/webqo/debug/diff",
+                    async: true,
+                    traditional: true,
+                    data: {
+                        'inputHost': inputHost,
+                        'forceQuery': forceQuery,
+                        'query_from': query_from,
+                        'query': query,
+                        'inputHost_diff': inputHost_diff,
+                        'forceQuery_diff': forceQuery_diff,
+                        'query_from_diff': query_from_diff
+                    },
+                    dataType: 'JSON',
+                    success: function (ret) {
+                        if (ret.status) {
+//                          $('#result').hide()
+                            $('#result_diff').html(ret.data.total_data)
+                            $('#jzwd_result').html(ret.data.jzwd_data)
+                            $('#rec_result').html(ret.data.rec_data)
+                            $('#int_result').html(ret.data.int_data)
+                        } else {
+                            $('#error_xml').text(ret.error)
+                        }
+                    },
+                    error: function () {
+                    },
+                });
+                $('#error_xml').text('');
+            } else {
+                if (query == '') {
+                    $('#error_xml').text('Request不可为空');
+                } else if (inputHost == '') {
+                    $('#error_xml').text('Host不可为空');
+                } else {
+                    $('#error_xml').text('未知错误');
+                }
+            }
+        })
+
+        //table hover
+        $(function () {
+            function showBox(obj, box) {
+                var timer = null;
+                $(obj).on("mouseover", function (e) {
+                    clearTimeout(timer);
+                    var clientX = e.clientX;
+                    var clientY = e.clientY;
+                    var y = clientY + 20;
+                    var txt = $(this).text();
+                    timer = setTimeout(function () {
+                        $(box).css("left", clientX).css("top", y);
+                        if (txt == "") {
+                            $(box).hide();
+                        } else {
+                            $(box).show();
+                            $(box).html(txt);
+                        }
+                    }, 300);
+                });
+                $(obj).on("mouseout", function () {
+                    clearTimeout(timer);
+                    $(box).hide();
+                });
+            }
+
+            showBox("#reqData > tbody td", "#showDiv");
+        });
+
+        //del
+        $('.del_debug').click(function () {
+            var line_id = $(this).parent().parent().attr('req_id');
+            $.ajax({
+                type: "POST",
+                url: "/webqo/debug/del",
+                async: true,
+                data: {
+                    'line_id': line_id
+                },
+                dataType: 'JSON',
+                success: function (obj) {
+                    if (obj.status) {
+                        location.reload();
+                    } else {
+                        $('#error_xml').text(obj.error);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
+        })
+
+        //getData
+        $('.get_data').dblclick(function () {
+            var linelst = $(this).children();
+            hostip = $(linelst[1]).text();
+            forceQuery = $(linelst[2]).text();
+            query_from = $(linelst[3]).text();
+            query = $(linelst[4]).text();
+            $('#inputHost').val(hostip);
+            $('#forceQuery').val(forceQuery);
+            $('#query').val(query);
+            $('#query_from').val(query_from);
+        })
+
+    </script>
+{% endblock %}
+
+
