@@ -4,90 +4,44 @@
     {% load static %}
 
 <div class="row">
-	<div class="col-md-5">
+	<div class="col-md-12">
 		<div class="tile">
-			<h3 class="tile-title">添加服务&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:15px;" id="error_xml"></span></h3>
-			<div class="tile-body">
-				<form class="form-horizontal" method="POST" id="form_interface_addtask">
-					<input type="hidden" name="csrfmiddlewaretoken" value="Euy6bcHgg5nDBME4Dm0MJS45oFn220yvmtOIKi5IniCmPkbRekE657qBuIEqBuMo">
-					<div class="form-group row">
-						<label class="control-label col-md-2">TestUrl</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="test_url" name="test_url" placeholder="http://ip:port">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">BaseUrl</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="base_url" name="base_url" placeholder="http://ip:port">
-						</div>
-					</div>
-					<div class="form-group row">
-		              	<label class="control-label col-md-2">ReqType</label>
-		              	<div class="col-md-4">
-		                <select id="reqtype" name="reqtype" class="form-control" style="cursor: pointer;">
-							<option value="xml"> xml </option>
-							<option value="alltrans_json"> alltrans_json </option>
-							<option value="json"> json </option>
-						</select>
-		              </div>
-		            </div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Query cfg</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="query_data_ip" name="query_data_ip" placeholder="ip addr">
-						</div>
-						<div class="col-sm-3">
-							<input type="text" class="form-control" id="query_data_user" name="query_data_user" placeholder="user">
-						</div>
-						<div class="col-sm-3">
-							<input type="text" class="form-control" id="query_data_pass" name="query_data_pass" placeholder="password">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Query path</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="query_data_path" name="query_data_path" placeholder="/search/odin/daemon/fanyi/query(请求文件的绝对路径)">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Testtag</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="testtag" name="testtag" placeholder="当前测试的备注信息">
-						</div>
-					</div>
-					
-				</form>
-			</div>
-			<div class="tile-footer">
-				<div class="row">
-					<div class="col-md-9 col-md-offset-2">
-						<button class="btn btn-primary" type="button" id="add_fy_task"><i class="fa fa-fw fa-lg fa-check-circle"></i>Add</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-7">
-		<div class="tile">
-			<h3 class="tile-title">任务列表</h3>
+			<h3 class="tile-title">结果列表</h3>
 			<div class="tile-body">
 				<table class="table" id="reqData">
 				<thead>
 					<tr>
-						<td>ID</td>
-						<td>StartTime</td>
-						<td>EndTime</td>
-						<td>Status</td>
+						<th>Query</th>
+						<th>QueryFrom</th>
+						<th>SogouResult</th>
+						<th>BaiduResult</th>
+						<th>SogouScene</th>
+						<th>BaiduScene</th>
+						<th>Status</th>
+
 											
 					</tr>
 				</thead>
 				<tbody style="cursor: pointer;" id="reqBody">
 					{% for item in li %}
 					<tr class="get_data">
-						<td>{{item.task_id}}</td>
-						<td>{{item.start_time}}</td>
-						<td style="background-color: red;">{{item.end_time}}</td>
+						<td>{{item.query}}</td>
+						<td style="background-color: red;">{{item.query_from}}</td>
+						<td>{{item.sg_res_type}}</td>
+						<td>{{item.bd_res_type}}</td>
+						<td>
+							{% if item.sg_scene %}
+								<a href={{item.sg_scene}} title="搜狗结果抓取现场" target="_blank">现场</a></td>
+						    {% else %}
+						    	<a title="该结果未保存现场">无现场</a> </td>
+						    {% endif %}
+						<td>
+							{% if item.bd_scene %}
+								<a href={{item.bd_scene}} title="百度结果抓取现场" target="_blank">现场</a> </td>
+						    {% else %}
+						    	<a title="该结果未保存现场">无现场</a> </td>
+						    {% endif %}
+						</td>
 						<td>{{item.status}}</td>
 				
 					</tr>

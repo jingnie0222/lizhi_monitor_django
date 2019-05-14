@@ -75,11 +75,10 @@
 				<table class="table" id="reqData">
 				<thead>
 					<tr>
-						<td>ID</td>
-						<td>StartTime</td>
-						<td>Diffs</td>
-						<td>TestUrl</td>
-											
+						<th id="taskId">ID</th>
+						<th>StartTime</th>
+						<th>EndTime</th>
+						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody style="cursor: pointer;" id="reqBody">
@@ -87,10 +86,17 @@
 					<tr class="get_data">
 						<td>{{item.task_id}}</td>
 						<td>{{item.start_time}}</td>
-						
-						<td style="background-color: red;">{{item.end_time}}</td>
-						
-						<td>{{item.status}}</td>
+						<td>{{item.end_time}}</td>
+						<td>
+							{% if item.status == 0 %}
+							    <a style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: yellow">Waiting</a>
+							{% elif item.status == 1 %}
+								<a style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: red">Running</a>
+							{% elif item.status == 2 %}
+								<a  href="/lizhi/result/result_detail_{{item.task_id}}.html"
+									style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: blue">Finished</a>
+							{% endif %}
+						</td>
 				
 					</tr>
                     {% endfor %}
@@ -288,6 +294,31 @@
             });
 
         });
+
+        //goto result detail
+        $('#taskId').click(function () {
+            var line_id = $(this).parent().parent().attr('req_id');
+            $.ajax({
+                type: "POST",
+                url: "del_xml_line",
+                async: true,
+                data: {
+                    'line_id': line_id
+                },
+                dataType: 'JSON',
+                success: function (obj) {
+                    if (obj.status) {
+                        location.reload();
+                    } else {
+                        $('#error_xml').text(obj.error);
+                    }
+                },
+                error: function () {
+
+                }
+            });
+
+        })
 
 
     </script>

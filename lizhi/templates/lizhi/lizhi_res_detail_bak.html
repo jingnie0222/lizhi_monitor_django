@@ -5,65 +5,168 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<div class="tile">
-			<h3 class="tile-title">结果列表</h3>
-			<div class="tile-body">
-				<table class="table" id="reqData">
-				<thead>
-					<tr>
-						<th>Query</th>
-						<th>QueryFrom</th>
-						<th>SogouResult</th>
-						<th>BaiduResult</th>
-						<th>SogouScene</th>
-						<th>BaiduScene</th>
-						<th>Status</th>
+		        <div class="tile">
+                <div class="alert alert-dismissible alert-success" role="alert">Statistics Summary&nbsp;&nbsp;&nbsp;
+					<a class="alert-link" href="/lizhi/home/">&lt;&lt;返回列表</a>&nbsp;&nbsp;&nbsp;
+					<span style="color:red;font-size:15px;" id="error_xml"></span></h3>
+				</div>
+				<div class="tile-body">
+					<div class="form-group row">
+						<div class="col-md-12">
+							<table class="table" id="StatisticsData">
+			                    <thead>
+			                    <tr>
+			                        <th>QueryFrom</th>
+									<th>FetchFrom</th>
+			                        <th>Lizhi</th>
+			                        <th>VR</th>
+			                        <th>Baike</th>
+			                        <th>Official</th>
+			                        <th>Other</th>
+			                        <th>Error</th>
+			                    </tr>
+			                    </thead>
+			                    <tbody id="reqBody">
+									<tr class="get_data">
+										<th rowspan="2" style="background-color: green;">SOGOU ({{sg_count}})</th>
+										<td>Sogou</td>
+										<td>{{qf_sg_ft_sg.Lizhi}}</td>
+										<td>{{qf_sg_ft_sg.VR}}</td>
+										<td>{{qf_sg_ft_sg.Baike}}</td>
+										<td>{{qf_sg_ft_sg.Official}}</td>
+										<td>{{qf_sg_ft_sg.Other}}</td>
+										<td>{{qf_sg_ft_sg.Error}}</td>
+									</tr>
+									<tr class="get_data">
+										<td>Baidu</td>
+										<td>{{qf_sg_ft_bd.Lizhi}}</td>
+										<td>{{qf_sg_ft_bd.VR}}</td>
+										<td>{{qf_sg_ft_bd.Baike}}</td>
+										<td>{{qf_sg_ft_bd.Official}}</td>
+										<td>{{qf_sg_ft_bd.Other}}</td>
+										<td>{{qf_sg_ft_bd.Error}}</td>
+									</tr>
+									<tr class="get_data">
+										<th rowspan="2" style="background-color: green;">BAIDU ({{bd_count}})</th>
+										<td>Sogou</td>
+										<td>{{qf_bd_ft_sg.Lizhi}}</td>
+										<td>{{qf_bd_ft_sg.VR}}</td>
+										<td>{{qf_bd_ft_sg.Baike}}</td>
+										<td>{{qf_bd_ft_sg.Official}}</td>
+										<td>{{qf_bd_ft_sg.Other}}</td>
+										<td>{{qf_bd_ft_sg.Error}}</td>
+									</tr>
+									<tr class="get_data">
+										<td>Baidu</td>
+										<td>{{qf_bd_ft_bd.Lizhi}}</td>
+										<td>{{qf_bd_ft_bd.VR}}</td>
+										<td>{{qf_bd_ft_bd.Baike}}</td>
+										<td>{{qf_bd_ft_bd.Official}}</td>
+										<td>{{qf_bd_ft_bd.Other}}</td>
+										<td>{{qf_bd_ft_bd.Error}}</td>
+									</tr>
 
-											
-					</tr>
-				</thead>
-				<tbody style="cursor: pointer;" id="reqBody">
-					{% for item in li %}
-					<tr class="get_data">
-						<td>{{item.query}}</td>
-						<td style="background-color: red;">{{item.query_from}}</td>
-						<td>{{item.sg_res_type}}</td>
-						<td>{{item.bd_res_type}}</td>
-						<td>
-							{% if item.sg_scene %}
-								<a href={{item.sg_scene}} title="搜狗结果抓取现场" target="_blank">现场</a> </td>
-						    {% else %}
-						    	<a title="该结果未保存现场">无现场</a> </td>
-						    {% endif %}
-						<td>
-							{% if item.bd_scene %}
-								<a href={{item.bd_scene}} title="百度结果抓取现场" target="_blank">现场</a> </td>
-						    {% else %}
-						    	<a title="该结果未保存现场">无现场</a> </td>
-						    {% endif %}
-						</td>
-						<td>{{item.status}}</td>
-				
-					</tr>
-                    {% endfor %}
-				</tbody>
-			</table>
-			</div>
-			<div id="showDiv" style="display: none;"></div>
-	        <div class="tile-footer">
-	        	<div class="row">
-	            <div class="col-md-9 col-md-offset-2">
-	            	<nav aria-label="Page navigation">
-						<ul class="pagination">
-				    		{{page_str}}
-						</ul>
-					</nav>
-	            </div>
-	         </div>        	
-		</div>
-		</div>
-	</div>
+			                    </tbody>
+			                </table>
+						</div>
+					</div>
+				</div>
+                <div class="alert alert-dismissible alert-success" role="alert">Cost Detail</div>
+                <div class="tile-body">
+					<div class="form-group row">
+						<div class="col-md-12">
+							<table class="table">
+			                    <thead>
+			                    <tr>
+			                        <td style="width: 50%;">Test</td>
+			                        <td style="width: 50%;">Base</td>
+			                    </tr>
+			                    </thead>
+			                    <tbody id="reqBody">
+			                    <tr req_id="">
+			                        <td style="width: 50%;"><pre style="white-space: pre-wrap;word-wrap: break-word;">Get ret num:        	20953.600364523078</pre></td>
+			                        <td style="width: 50%;"><pre style="white-space: pre-wrap;word-wrap: break-word;">Get ret num:        	17977.288152789977</pre></td>
+			                    </tr>
+			                    </tbody>
+			               </table>
+						</div>
+					</div>
+				</div>
+
+				<div class="alert alert-dismissible alert-success" role="alert">Result Detail</div>
+				  <div class="widget-small primary coloured-icon">
+					<div class="info">
+						<div class="form-group row" style="margin-bottom:0rem">
+							<div class="col-md-2">
+								<label class="control-label">搜索词来源</label>
+								<select id="query_from" name="pstatus" class="form-control pfilter" style="cursor: pointer;">
+									<option value="sogou"> 搜狗 </option>
+									<option value="baidu"> 百度 </option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label class="control-label">搜狗首条结果</label>
+								<select id="sg_first_res" name="pfrom" class="form-control pfilter" style="cursor: pointer;">
+									<option value="Lizhi"> 立知</option>
+									<option value="VR"> VR </option>
+									<option value="Baike"> 百科 </option>
+									<option value="Official"> 官网 </option>
+									<option value="Other"> 其他 </option>
+									<option value="Error"> ERROR </option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label class="control-label">百度首条结果</label>
+								<select id="bd_first_res" name="httpcode" class="form-control pfilter" style="cursor: pointer;">
+									<option value="Lizhi"> 立知</option>
+									<option value="VR"> VR </option>
+									<option value="Baike"> 百科 </option>
+									<option value="Official"> 官网 </option>
+									<option value="Other"> 其他 </option>
+									<option value="Error"> ERROR </option>
+								</select>
+							</div>
+
+							<div class="col-md-2">
+						    	<button class="btn btn-primary" type="button" id="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
+							</div>
+
+							<div class="col-md-2">
+								<span class="label label-info" style="font-size: 15px;cursor: pointer;line-height: 70px;">
+									<a href="/publicsv/deadlink/" style="text-decoration: none;">全部结果</a>
+								</span>
+							</div>
+						</div>
+					</div>
+				  </div>
+
+				  <div class="tile-body">
+							<div class="form-group row">
+								<div class="col-md-12">
+									<table class="table" id="selectedData">
+										<thead>
+										<tr>
+											<th>QueryID</th>
+											<th>Query</th>
+											<th>sg_res_type</th>
+											<th>bd_res_type</th>
+											<th>sg_scene</th>
+											<th>bd_scene</th>
+											<th>Status</th>
+										</tr>
+										</thead>
+										<tbody id="selectedDataBody">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+        </div>
+
+        <div class="clearfix"></div>
 </div>
+
 {% endblock %}
 {% block js %}
     <script>
@@ -240,6 +343,113 @@
             });
 
         });
+
+
+        //query
+        $('#submit').click(function () {
+            var query_from = $('#query_from').val()
+            var sg_first_res = $('#sg_first_res').val()
+            var bd_first_res = $('#bd_first_res').val()
+            var curr_taskid = (window.location.pathname.split('_')[2].split('.')[0]);   //从当前url中获取task_id
+
+            if (query_from != "" && sg_first_res != "" && bd_first_res != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/lizhi/result/filter",
+                    async: true,
+                    traditional: true,
+                    data: {
+                        'query_from': query_from,
+                        'sg_first_res': sg_first_res,
+                        'bd_first_res': bd_first_res,
+                        'task_id': curr_taskid,
+                    },
+                    dataType: 'JSON',
+                    success: function (ret) {
+                        if (ret.status) {
+                            $('#selectedData').html(ret)
+
+                        } else {
+                            $('#error_xml').text(ret.error)
+                        }
+                    },
+                    error: function () {
+                    },
+                });
+                $('#error_xml').text('');
+            } else {
+                if (query == '') {
+                    $('#error_xml').text('Request不可为空');
+                } else if (inputHost == '') {
+                    $('#error_xml').text('Host不可为空');
+                } else {
+                    $('#error_xml').text('未知错误');
+                }
+            }
+
+        })
+
+
+        //diff
+        $('#start_diff').click(function () {
+            var query = $('#query').val()
+
+            var inputHost = $('#inputHost').val()
+            var forceQuery = $('#forceQuery').val()
+            var query_from = $('#query_from').val()
+
+            var inputHost_diff = $('#inputHost_diff').val()
+            var forceQuery_diff = $('#forceQuery_diff').val()
+            var query_from_diff = $('#query_from_diff').val()
+			$('#res').addClass('hide');
+			$('#diff').removeClass('hide');
+			$('#result').text('');
+			$('#result_diff').html("")
+            $('#jzwd_result').html("")
+            $('#rec_result').html("")
+            $('#int_result').html("")
+            if (query != "" && inputHost != "" && inputHost_diff != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/tupush/debug/diff",
+                    async: true,
+                    traditional: true,
+                    data: {
+                        'inputHost': inputHost,
+                        'forceQuery': forceQuery,
+                        'query_from': query_from,
+                        'query': query,
+                        'inputHost_diff': inputHost_diff,
+                        'forceQuery_diff': forceQuery_diff,
+                        'query_from_diff': query_from_diff
+                    },
+                    dataType: 'JSON',
+                    success: function (ret) {
+                        if (ret.status) {
+//                          $('#result').hide()
+                            $('#result_diff').html(ret.data.total_data)
+                            $('#jzwd_result').html(ret.data.jzwd_data)
+                            $('#rec_result').html(ret.data.rec_data)
+                            $('#int_result').html(ret.data.int_data)
+                        } else {
+                            $('#error_xml').text(ret.error)
+                        }
+                    },
+                    error: function () {
+                    },
+                });
+                $('#error_xml').text('');
+            } else {
+                if (query == '') {
+                    $('#error_xml').text('Request不可为空');
+                } else if (inputHost == '') {
+                    $('#error_xml').text('Host不可为空');
+                } else {
+                    $('#error_xml').text('未知错误');
+                }
+            }
+        })
+
 
 
     </script>
