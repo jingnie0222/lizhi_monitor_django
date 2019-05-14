@@ -10,10 +10,11 @@ from bs4 import BeautifulSoup
 import difflib
 import pysnooper
 import re
+from django.core import serializers
 
 
 # Create your views here.
-@pysnooper.snoop()
+#@pysnooper.snoop()
 def lizhiHome(request):
     if request.method == 'GET':
         page_id = request.GET.get('page','')
@@ -23,11 +24,103 @@ def lizhiHome(request):
             current_page = int(page_id)
         print('current_page',current_page)
         allTast = models.Task.objects.order_by('-task_id')
-        page_obj = pagination.Page(current_page, len(allTast), 16, 9)
+        page_obj = pagination.Page(current_page, len(allTast), 20, 10)
         data = allTast[page_obj.start:page_obj.end]
         page_str = page_obj.page_str("/lizhi/home?page=")
-        print(page_str)
+        #print(page_str)
         return render(request,'lizhi/lizhi_home.html',{'li':data,'page_str':page_str})
+
+
+def lizhiResDetail(request, task_id):
+
+    task_detail = models.ResultDetail.objects.filter(task_id=task_id)
+
+    if request.method == 'GET':
+        page_id = request.GET.get('page', '')
+        if page_id == '':
+            current_page = 1
+        else:
+            current_page = int(page_id)
+
+        page_obj = pagination.Page(current_page, len(task_detail), 20, 10)
+        data = task_detail[page_obj.start:page_obj.end]
+        page_str = page_obj.page_str('result_detail_' + task_id + '.html?page=')
+
+        return render(request, 'lizhi/lizhi_res_detail.html',{'li': data,'page_str': page_str})
+
+
+def get_static_summary(task_id):
+
+    #value设置为字符串，主要是为了一起存储count和percent
+    queryfrom_sg_fetch_sg = {'Lizhi': '', 'VR': '', 'Baike': '', 'Official': '', 'Other': '', 'Error': ''}
+    queryfrom_sg_fetch_bd = {'Lizhi': '', 'VR': '', 'Baike': '', 'Official': '', 'Other': '', 'Error': ''}
+    queryfrom_bd_fetch_sg = {'Lizhi': '', 'VR': '', 'Baike': '', 'Official': '', 'Other': '', 'Error': ''}
+    queryfrom_bd_fetch_bd = {'Lizhi': '', 'VR': '', 'Baike': '', 'Official': '', 'Other': '', 'Error': ''}
+
+    try:
+        allResult  = models.ResultDetail.objects.filter(task_id=task_id)
+
+        sg_result = allResult.filter(query_from='sogou')  #词源是搜狗
+        bd_result = allResult.filter(query_from='baidu')  #词源是百度
+
+        sg_count = sg_result.count()
+        bd_count = bd_result.count()
+
+        if sg_count and bd_count:
+            for type in ['Lizhi', 'VR', 'Baike', 'Official', 'Other', 'Error']:
+                queryfrom_sg_fetch_sg[type] = str(sg_result.filter(sg_res_type=type).count()) + "\t(" + str(sg_result.filter(sg_res_type=type).count()/sg_count) + "%)"
+                queryfrom_sg_fetch_bd[type] = str(sg_result.filter(bd_res_type=type).count()) + "\t(" + str(sg_result.filter(bd_res_type=type).count()/sg_count) + "%)"
+                queryfrom_bd_fetch_sg[type] = str(bd_result.filter(sg_res_type=type).count()) + "\t(" + str(bd_result.filter(sg_res_type=type).count()/bd_count) + "%)"
+                queryfrom_bd_fetch_bd[type] = str(bd_result.filter(bd_res_type=type).count()) + "\t(" + str(bd_result.filter(bd_res_type=type).count()/bd_count) + "%)"
+
+        return queryfrom_sg_fetch_sg, queryfrom_sg_fetch_bd, queryfrom_bd_fetch_sg, queryfrom_bd_fetch_bd, sg_count, bd_count
+
+    except Exception as err:
+        print("[get_static_summary]:%s" % err)
+
+
+
+
+
+def lizhiResDetail_bak(request, task_id):
+    qf_sg_ft_sg, qf_sg_ft_bd, qf_bd_ft_sg, qf_bd_ft_bd, sg_count, bd_count = get_static_summary(task_id)
+    return render(request, 'lizhi/lizhi_res_detail_bak.html',
+                  {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
+                   'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
+                   'sg_count':sg_count , 'bd_count':bd_count})
+
+#@pysnooper.snoop()
+def result_filter(request):
+    ret = {
+        'status': True,
+        'error': None,
+        'data': None
+    }
+
+    query_from = request.POST.get('query_from')
+    sg_res_type = request.POST.get('sg_first_res')
+    bd_res_type = request.POST.get('bd_first_res')
+    task_id = request.POST.get('task_id')
+
+    try:
+        selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+        print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
+        #对象序列化，转化为json
+        ret['data'] = json.loads(serializers.serialize('json', selectResult))
+        print(ret)
+
+    except Exception as e:
+        print(e)
+    #     print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+    #     ret['error'] = "Error:" + str(e)
+    #     ret['status'] = False
+    return HttpResponse(json.dumps(ret))
+
+
+
+
+
+
 
 
 # @auth
@@ -93,8 +186,6 @@ def debug(request):
             ret['error'] = "Error:" + str(e)
             ret['status'] = False
         return HttpResponse(json.dumps(ret))
-
-
 
 
 def debug_diff(request):
