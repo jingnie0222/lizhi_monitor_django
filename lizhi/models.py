@@ -60,7 +60,7 @@ from django.db import models
 #     # user_fk = models.ForeignKey(to=UserInfo, to_field='username', on_delete=models.CASCADE)
 # '''
 
-# 0 1 2
+# status: 0 任务创建 1 任务运行中 2 任务已完成
 class Task(models.Model):
     task_id = models.AutoField(primary_key=True)
     start_time = models.CharField(max_length=50, default="")
@@ -69,7 +69,7 @@ class Task(models.Model):
 
 
 
-# 0 未解决 1 已解决 2 无问题
+# status: 0 未解决 1 已解决 2 无问题
 class ResultDetail(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     query_id = models.AutoField(primary_key=True)
@@ -79,8 +79,9 @@ class ResultDetail(models.Model):
     bd_res_type = models.CharField(max_length=50, default="")
     sg_scene = models.CharField(max_length=500, default="")
     bd_scene = models.CharField(max_length=500, default="")
-    # is_resolve = models.NullBooleanField(default=None)
     status = models.IntegerField(default=0)
+
+
 
 
 
