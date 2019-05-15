@@ -11,6 +11,7 @@ import difflib
 import pysnooper
 import re
 from django.core import serializers
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -81,13 +82,15 @@ def get_static_summary(task_id):
 
 
 
-
 def lizhiResDetail_bak(request, task_id):
     qf_sg_ft_sg, qf_sg_ft_bd, qf_bd_ft_sg, qf_bd_ft_bd, sg_count, bd_count = get_static_summary(task_id)
+
+    allResult = models.ResultDetail.objects.filter(task_id=task_id)
+
     return render(request, 'lizhi/lizhi_res_detail_bak.html',
                   {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
                    'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
-                   'sg_count':sg_count , 'bd_count':bd_count})
+                   'sg_count':sg_count , 'bd_count':bd_count, 'all_res':allResult})
 
 #@pysnooper.snoop()
 def result_filter(request):
@@ -103,23 +106,40 @@ def result_filter(request):
     task_id = request.POST.get('task_id')
 
     try:
-        selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+        if query_from == 'All' and sg_res_type == 'All' and bd_res_type == 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id)
+
+        elif query_from == 'All' and sg_res_type == 'All' and bd_res_type != 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(bd_res_type=bd_res_type)
+
+        elif query_from == 'All' and sg_res_type !=  'All' and bd_res_type == 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(sg_res_type=sg_res_type)
+
+        elif query_from == 'All' and sg_res_type !=  'All' and bd_res_type != 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+
+        elif query_from != 'All' and sg_res_type == 'All' and bd_res_type == 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from)
+
+        elif query_from != 'All' and sg_res_type == 'All' and bd_res_type != 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(bd_res_type=bd_res_type)
+
+        elif query_from != 'All' and sg_res_type != 'All' and bd_res_type == 'All':
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type)
+
+        else:
+            selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+
         print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
         #对象序列化，转化为json
         ret['data'] = json.loads(serializers.serialize('json', selectResult))
-        print(ret)
 
     except Exception as e:
         print(e)
-    #     print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
-    #     ret['error'] = "Error:" + str(e)
-    #     ret['status'] = False
+        print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+        ret['error'] = "Error:" + str(e)
+        ret['status'] = False
     return HttpResponse(json.dumps(ret))
-
-
-
-
-
 
 
 

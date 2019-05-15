@@ -100,6 +100,7 @@
 							<div class="col-md-2">
 								<label class="control-label">搜索词来源</label>
 								<select id="query_from" name="pstatus" class="form-control pfilter" style="cursor: pointer;">
+									<option value="All"> 全部 </option>
 									<option value="sogou"> 搜狗 </option>
 									<option value="baidu"> 百度 </option>
 								</select>
@@ -107,6 +108,7 @@
 							<div class="col-md-2">
 								<label class="control-label">搜狗首条结果</label>
 								<select id="sg_first_res" name="pfrom" class="form-control pfilter" style="cursor: pointer;">
+									<option value="All"> 全部</option>
 									<option value="Lizhi"> 立知</option>
 									<option value="VR"> VR </option>
 									<option value="Baike"> 百科 </option>
@@ -118,8 +120,8 @@
 							<div class="col-md-2">
 								<label class="control-label">百度首条结果</label>
 								<select id="bd_first_res" name="httpcode" class="form-control pfilter" style="cursor: pointer;">
+									<option value="All"> 全部</option>
 									<option value="Lizhi"> 立知</option>
-									<option value="VR"> VR </option>
 									<option value="Baike"> 百科 </option>
 									<option value="Official"> 官网 </option>
 									<option value="Other"> 其他 </option>
@@ -131,11 +133,6 @@
 						    	<button class="btn btn-primary" type="button" id="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>
 							</div>
 
-							<div class="col-md-2">
-								<span class="label label-info" style="font-size: 15px;cursor: pointer;line-height: 70px;">
-									<a href="/publicsv/deadlink/" style="text-decoration: none;">全部结果</a>
-								</span>
-							</div>
 						</div>
 					</div>
 				  </div>
@@ -148,15 +145,40 @@
 										<tr>
 											<th>QueryID</th>
 											<th>Query</th>
+											<th>QueryFrom</th>
 											<th>sg_res_type</th>
-											<th>bd_res_type</th>
 											<th>sg_scene</th>
+											<th>bd_res_type</th>
 											<th>bd_scene</th>
 											<th>Status</th>
 										</tr>
 										</thead>
 										<tbody id="selectedDataBody">
+											{% for item in all_res %}
+										    <tr class="get_data">
+										    	<td>{{item.query_id}}</td>
+												<td>{{item.query}}</td>
+												<td>{{item.query_from}}</td>
+												<td>{{item.sg_res_type}}</td>
+												<td>
+													{% if item.sg_scene %}
+														<a href={{item.sg_scene}} title="搜狗结果抓取现场" target="_blank">现场</a></td>
+												    {% else %}
+												   		<a title="该结果未保存现场">无现场</a> </td>
+												    {% endif %}
+											    </td>
 
+											    <td>{{item.bd_res_type}}</td>
+											    <td>
+													{% if item.bd_scene %}
+														<a href={{item.bd_scene}} title="百度结果抓取现场" target="_blank">现场</a></td>
+											        {% else %}
+														<a title="该结果未保存现场">无现场</a> </td>
+													{% endif %}
+											    </td>
+												<td>{{item.status}}</td>
+											</tr>
+										    {% endfor %}
 										</tbody>
 									</table>
 								</div>
@@ -367,7 +389,39 @@
                     dataType: 'JSON',
                     success: function (ret) {
                         if (ret.status) {
-                            $('#selectedData').html(ret)
+                            console.log(ret)
+                            $("#selectedData tr:not(:first)").empty("");   //清空上一次查询的内容，保留表头
+                            $("#selectedDataBody").html("")  //清空上一次无结果提示
+                            var res = ret.data
+
+                            if (res.length == 0){
+                            $("#selectedDataBody").html("没有查到相应结果")
+                            }else{
+								var s = "";
+								//拼接为表格
+								for(var i=0; i<res.length; i++){
+									s =  "<tr><td>" + res[i].pk + "</td><td>" + res[i].fields.query + "</td><td>"
+									     + res[i].fields.query_from + "</td><td>" + res[i].fields.sg_res_type + "</td><td>"
+
+									     if (res[i].fields.sg_scene){
+									     	s += '<a href=' + res[i].fields.sg_scene + ' title="搜狗结果抓取现场" target="_blank">现场</a></td><td>'
+									     }
+									     else{
+									     	s += '<a title="该结果未保存现场">无现场</a> </td><td>'
+									     }
+
+										 s += res[i].fields.bd_res_type + "</td><td>"
+										 if (res[i].fields.bd_scene){
+									     	s += '<a href=' + res[i].fields.bd_scene + ' title="百度结果抓取现场" target="_blank">现场</a></td><td>'
+									     }
+									     else{
+									     	s += '<a title="该结果未保存现场">无现场</a> </td><td>'
+									     }
+
+										 s += res[i].fields.status + "</td></tr>"
+									$("#selectedData").append(s)
+								}
+							}
 
                         } else {
                             $('#error_xml').text(ret.error)
@@ -377,14 +431,6 @@
                     },
                 });
                 $('#error_xml').text('');
-            } else {
-                if (query == '') {
-                    $('#error_xml').text('Request不可为空');
-                } else if (inputHost == '') {
-                    $('#error_xml').text('Host不可为空');
-                } else {
-                    $('#error_xml').text('未知错误');
-                }
             }
 
         })
