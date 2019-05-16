@@ -69,10 +69,10 @@ def get_static_summary(task_id):
 
         if sg_count and bd_count:
             for type in ['Lizhi', 'VR', 'Baike', 'Official', 'Other', 'Error']:
-                queryfrom_sg_fetch_sg[type] = str(sg_result.filter(sg_res_type=type).count()) + "\t(" + str(sg_result.filter(sg_res_type=type).count()/sg_count) + "%)"
-                queryfrom_sg_fetch_bd[type] = str(sg_result.filter(bd_res_type=type).count()) + "\t(" + str(sg_result.filter(bd_res_type=type).count()/sg_count) + "%)"
-                queryfrom_bd_fetch_sg[type] = str(bd_result.filter(sg_res_type=type).count()) + "\t(" + str(bd_result.filter(sg_res_type=type).count()/bd_count) + "%)"
-                queryfrom_bd_fetch_bd[type] = str(bd_result.filter(bd_res_type=type).count()) + "\t(" + str(bd_result.filter(bd_res_type=type).count()/bd_count) + "%)"
+                queryfrom_sg_fetch_sg[type] = str(sg_result.filter(sg_res_type=type).count()) + "\t(" + ('%.2f' % (sg_result.filter(sg_res_type=type).count()*100/sg_count)) + "%)"
+                queryfrom_sg_fetch_bd[type] = str(sg_result.filter(bd_res_type=type).count()) + "\t(" + ('%.2f' % (sg_result.filter(bd_res_type=type).count()*100/sg_count)) + "%)"
+                queryfrom_bd_fetch_sg[type] = str(bd_result.filter(sg_res_type=type).count()) + "\t(" + ('%.2f' % (bd_result.filter(sg_res_type=type).count()*100/bd_count)) + "%)"
+                queryfrom_bd_fetch_bd[type] = str(bd_result.filter(bd_res_type=type).count()) + "\t(" + ('%.2f' % (bd_result.filter(bd_res_type=type).count()*100/bd_count)) + "%)"
 
         return queryfrom_sg_fetch_sg, queryfrom_sg_fetch_bd, queryfrom_bd_fetch_sg, queryfrom_bd_fetch_bd, sg_count, bd_count
 
@@ -105,6 +105,13 @@ def result_filter(request):
     bd_res_type = request.POST.get('bd_first_res')
     task_id = request.POST.get('task_id')
 
+    # query_from = request.GET.get('query_from')
+    # sg_res_type = request.GET.get('sg_first_res')
+    # bd_res_type = request.GET.get('bd_first_res')
+    # task_id = request.GET.get('task_id')
+
+    print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
+
     try:
         if query_from == 'All' and sg_res_type == 'All' and bd_res_type == 'All':
             selectResult = models.ResultDetail.objects.filter(task_id=task_id)
@@ -130,7 +137,7 @@ def result_filter(request):
         else:
             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
 
-        print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
+
         #对象序列化，转化为json
         ret['data'] = json.loads(serializers.serialize('json', selectResult))
 
