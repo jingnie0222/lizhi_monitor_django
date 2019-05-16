@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 		        <div class="tile">
                 <div class="alert alert-dismissible alert-success" role="alert">Statistics Summary&nbsp;&nbsp;&nbsp;
-					<a class="alert-link" href="/lizhi/home/">&lt;&lt;返回列表</a>&nbsp;&nbsp;&nbsp;
+					<a class="alert-link" href="/lizhi/home/">&lt;&lt;返回任务列表</a>&nbsp;&nbsp;&nbsp;
 					<span style="color:red;font-size:15px;" id="error_xml"></span></h3>
 				</div>
 				<div class="tile-body">
@@ -114,7 +114,7 @@
 									<option value="Baike"> 百科 </option>
 									<option value="Official"> 官网 </option>
 									<option value="Other"> 其他 </option>
-									<option value="Error"> ERROR </option>
+									<!--<option value="Error"> ERROR </option>-->
 								</select>
 							</div>
 							<div class="col-md-2">
@@ -125,7 +125,7 @@
 									<option value="Baike"> 百科 </option>
 									<option value="Official"> 官网 </option>
 									<option value="Other"> 其他 </option>
-									<option value="Error"> ERROR </option>
+									<!--<option value="Error"> ERROR </option>-->
 								</select>
 							</div>
 
@@ -157,7 +157,7 @@
 											{% for item in all_res %}
 										    <tr class="get_data">
 										    	<td>{{item.query_id}}</td>
-												<td>{{item.query}}</td>
+												<td style="word-wrap:break-word;word-break:break-all;" width="300px";>{{item.query}}</td>
 												<td>{{item.query_from}}</td>
 												<td>{{item.sg_res_type}}</td>
 												<td>
@@ -367,7 +367,7 @@
         });
 
 
-        //query
+        //query post请求方式
         $('#submit').click(function () {
             var query_from = $('#query_from').val()
             var sg_first_res = $('#sg_first_res').val()
@@ -400,7 +400,7 @@
 								var s = "";
 								//拼接为表格
 								for(var i=0; i<res.length; i++){
-									s =  "<tr><td>" + res[i].pk + "</td><td>" + res[i].fields.query + "</td><td>"
+									s =  "<tr><td>" + res[i].pk + '</td><td style="word-wrap:break-word;word-break:break-all;" width="300px">' + res[i].fields.query + "</td><td>"
 									     + res[i].fields.query_from + "</td><td>" + res[i].fields.sg_res_type + "</td><td>"
 
 									     if (res[i].fields.sg_scene){
@@ -434,6 +434,27 @@
             }
 
         })
+
+
+        <!--//query-->
+        <!--$('#submit').click(function () {-->
+        	<!--var query_from = $('#query_from').val()-->
+        	<!--var sg_first_res = $('#sg_first_res').val()-->
+        	<!--var bd_first_res = $('#bd_first_res').val()-->
+        	<!--var curr_taskid = (window.location.pathname.split('_')[2].split('.')[0]);   //从当前url中获取task_id-->
+            <!--$(this).get("lizhi/result",-->
+                        <!--{-->
+                        	<!--queryfrom: query_from,-->
+                        	<!--sg: sg_first_res,-->
+                        	<!--bd: bd_first_res,-->
+                        	<!--task_id: curr_taskid-->
+                        <!--},-->
+                        <!--function (ret) {-->
+                        <!--console.log(ret)-->
+                        <!--})-->
+
+        <!--})-->
+
 
 
         //diff
