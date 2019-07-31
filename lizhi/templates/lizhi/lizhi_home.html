@@ -4,71 +4,71 @@
     {% load static %}
 
 <div class="row">
-	<div class="col-md-5">
-		<div class="tile">
-			<h3 class="tile-title">添加服务&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:15px;" id="error_xml"></span></h3>
-			<div class="tile-body">
-				<form class="form-horizontal" method="POST" id="form_interface_addtask">
-					<input type="hidden" name="csrfmiddlewaretoken" value="Euy6bcHgg5nDBME4Dm0MJS45oFn220yvmtOIKi5IniCmPkbRekE657qBuIEqBuMo">
-					<div class="form-group row">
-						<label class="control-label col-md-2">TestUrl</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="test_url" name="test_url" placeholder="http://ip:port">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">BaseUrl</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="base_url" name="base_url" placeholder="http://ip:port">
-						</div>
-					</div>
-					<div class="form-group row">
-		              	<label class="control-label col-md-2">ReqType</label>
-		              	<div class="col-md-4">
-		                <select id="reqtype" name="reqtype" class="form-control" style="cursor: pointer;">
-							<option value="xml"> xml </option>
-							<option value="alltrans_json"> alltrans_json </option>
-							<option value="json"> json </option>
-						</select>
-		              </div>
-		            </div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Query cfg</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="query_data_ip" name="query_data_ip" placeholder="ip addr">
-						</div>
-						<div class="col-sm-3">
-							<input type="text" class="form-control" id="query_data_user" name="query_data_user" placeholder="user">
-						</div>
-						<div class="col-sm-3">
-							<input type="text" class="form-control" id="query_data_pass" name="query_data_pass" placeholder="password">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Query path</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="query_data_path" name="query_data_path" placeholder="/search/odin/daemon/fanyi/query(请求文件的绝对路径)">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="control-label col-md-2">Testtag</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="testtag" name="testtag" placeholder="当前测试的备注信息">
-						</div>
-					</div>
-					
-				</form>
-			</div>
-			<div class="tile-footer">
-				<div class="row">
-					<div class="col-md-9 col-md-offset-2">
-						<button class="btn btn-primary" type="button" id="add_fy_task"><i class="fa fa-fw fa-lg fa-check-circle"></i>Add</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-7">
+	<!--<div class="col-md-5">-->
+		<!--<div class="tile">-->
+			<!--<h3 class="tile-title">添加服务&nbsp;&nbsp;&nbsp;<span style="color:red;font-size:15px;" id="error_xml"></span></h3>-->
+			<!--<div class="tile-body">-->
+				<!--<form class="form-horizontal" method="POST" id="form_interface_addtask">-->
+					<!--<input type="hidden" name="csrfmiddlewaretoken" value="Euy6bcHgg5nDBME4Dm0MJS45oFn220yvmtOIKi5IniCmPkbRekE657qBuIEqBuMo">-->
+					<!--<div class="form-group row">-->
+						<!--<label class="control-label col-md-2">TestUrl</label>-->
+						<!--<div class="col-md-10">-->
+							<!--<input type="text" class="form-control" id="test_url" name="test_url" placeholder="http://ip:port">-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="form-group row">-->
+						<!--<label class="control-label col-md-2">BaseUrl</label>-->
+						<!--<div class="col-md-10">-->
+							<!--<input type="text" class="form-control" id="base_url" name="base_url" placeholder="http://ip:port">-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="form-group row">-->
+		              	<!--<label class="control-label col-md-2">ReqType</label>-->
+		              	<!--<div class="col-md-4">-->
+		                <!--<select id="reqtype" name="reqtype" class="form-control" style="cursor: pointer;">-->
+							<!--<option value="xml"> xml </option>-->
+							<!--<option value="alltrans_json"> alltrans_json </option>-->
+							<!--<option value="json"> json </option>-->
+						<!--</select>-->
+		              <!--</div>-->
+		            <!--</div>-->
+					<!--<div class="form-group row">-->
+						<!--<label class="control-label col-md-2">Query cfg</label>-->
+						<!--<div class="col-sm-4">-->
+							<!--<input type="text" class="form-control" id="query_data_ip" name="query_data_ip" placeholder="ip addr">-->
+						<!--</div>-->
+						<!--<div class="col-sm-3">-->
+							<!--<input type="text" class="form-control" id="query_data_user" name="query_data_user" placeholder="user">-->
+						<!--</div>-->
+						<!--<div class="col-sm-3">-->
+							<!--<input type="text" class="form-control" id="query_data_pass" name="query_data_pass" placeholder="password">-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="form-group row">-->
+						<!--<label class="control-label col-md-2">Query path</label>-->
+						<!--<div class="col-md-10">-->
+							<!--<input type="text" class="form-control" id="query_data_path" name="query_data_path" placeholder="/search/odin/daemon/fanyi/query(请求文件的绝对路径)">-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="form-group row">-->
+						<!--<label class="control-label col-md-2">Testtag</label>-->
+						<!--<div class="col-sm-10">-->
+							<!--<input type="text" class="form-control" id="testtag" name="testtag" placeholder="当前测试的备注信息">-->
+						<!--</div>-->
+					<!--</div>-->
+					<!---->
+				<!--</form>-->
+			<!--</div>-->
+			<!--<div class="tile-footer">-->
+				<!--<div class="row">-->
+					<!--<div class="col-md-9 col-md-offset-2">-->
+						<!--<button class="btn btn-primary" type="button" id="add_fy_task"><i class="fa fa-fw fa-lg fa-check-circle"></i>Add</button>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+	<!--</div>-->
+	<div class="col-md-12">
 		<div class="tile">
 			<h3 class="tile-title">任务列表</h3>
 			<div class="tile-body">
@@ -91,7 +91,7 @@
 							{% if item.status == 0 %}
 							    <a style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: yellow">Waiting</a>
 							{% elif item.status == 1 %}
-								<a style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: red">Running</a>
+								<a  href="/lizhi/result/result_detail_{{item.task_id}}.html" style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: red">Running</a>
 							{% elif item.status == 2 %}
 								<a  href="/lizhi/result/result_detail_{{item.task_id}}.html"
 									style="text-decoration: underline; text-shadow: 1px 0 0 currentColor; color: blue">Finished</a>
@@ -135,165 +135,6 @@
             }
         });
 
-        //request
-        $('#add_automation').click(function () {
-            var qo_base_svn = $('#qo_basesvn').val()
-            var qo_text_svn = $('#qo_testsvn').val()
-            if (qo_base_svn != "" || qo_text_svn != "") {
-                $.ajax({
-                    type: "POST",
-                    url: "/lizhi/auto/add",
-                    async: true,
-                    traditional: true,
-                    data: $('#form_automation').serialize(),
-                    dataType: 'JSON',
-                    success: function (obj) {
-                        console.log(obj.status)
-                        if (obj.status) {
-                            {#                            console.log(JSON.stringify($('#form_qo_addtask').serialize()))#}
-                            location.reload();
-                        } else {
-                            $('#error_xml').text(obj.error);
-                        }
-                    },
-                    error: function () {
-
-                    },
-                });
-                $('#error_xml').text('');
-            } else {
-                $('#error_xml').text('svn不可都为空');
-            }
-        })
-
-        //table hover
-        $(function () {
-            function showBox(obj, box) {
-                var timer = null;
-                $(obj).on("mouseover", function (e) {
-                    clearTimeout(timer);
-                    var clientX = e.clientX;
-                    var clientY = e.clientY;
-                    var y = clientY + 20;
-                    var txt = $(this).text();
-                    timer = setTimeout(function () {
-                        $(box).css("left", clientX).css("top", y);
-                        if (txt == "") {
-                            $(box).hide();
-                        } else {
-                            $(box).show();
-                            $(box).html(txt);
-                        }
-                    }, 300);
-                });
-                $(obj).on("mouseout", function () {
-                    clearTimeout(timer);
-                    $(box).hide();
-                });
-            }
-
-            showBox("#reqData > tbody td", "#showDiv");
-        });
-
-        //del
-        $('.del_line').click(function () {
-            var line_id = $(this).parent().parent().attr('req_id');
-            $.ajax({
-                type: "POST",
-                url: "del_xml_line",
-                async: true,
-                data: {
-                    'line_id': line_id
-                },
-                dataType: 'JSON',
-                success: function (obj) {
-                    if (obj.status) {
-                        location.reload();
-                    } else {
-                        $('#error_xml').text(obj.error);
-                    }
-                },
-                error: function () {
-
-                }
-            });
-
-        })
-
-        //getData
-        $('#get_data').dblclick(function () {
-            var linelst = $(this).children();
-            press_expid = $(linelst[3]).text();
-            press_rate = $(linelst[4]).text();
-            testtag = $(linelst[5]).text();
-            testsvn = $(linelst[9]).text();
-            basesvn = $(linelst[10]).text();
-            newconfip = $(linelst[11]).text();
-            newconfuser = $(linelst[12]).text();
-            newconfpassw = $(linelst[13]).text();
-            newconfpath = $(linelst[14]).text();
-            newdataip = $(linelst[15]).text();
-            newdatauser = $(linelst[16]).text();
-            newdatapassw = $(linelst[17]).text();
-            newdatapath = $(linelst[18]).text();
-            press_qps = $(linelst[19]).text();
-            press_time = $(linelst[20]).text();
-            query_ip = $(linelst[21]).text();
-            query_user = $(linelst[22]).text();
-            query_pwd = $(linelst[23]).text();
-            query_path = $(linelst[24]).text();
-
-            $('#qo_testsvn').val(testsvn);
-            $('#qo_basesvn').val(basesvn);
-            $('#new_conf_ip').val(newconfip);
-            $('#new_conf_user').val(newconfuser);
-            $('#new_conf_pass').val(newconfpassw);
-            $('#new_conf_path').val(newconfpath);
-            $('#new_data_ip').val(newdataip);
-            $('#new_data_user').val(newdatauser);
-            $('#new_data_pass').val(newdatapassw);
-            $('#new_data_path').val(newdatapath);
-            $('#qo_qps').val(press_qps);
-            $('#qo_press_time').val(press_time);
-            $('#qo_press_rate').val(press_rate);
-            $('#qo_press_expid').val(press_expid);
-            $('#testtag').val(testtag);
-            $('#query_ip').val(query_ip);
-            $('#query_user').val(query_user);
-            $('#query_pwd').val(query_pwd);
-            $('#query_path').val(query_path);
-
-        })
-
-
-        $(document).ready(function () {
-            $('#query_ip').attr('readonly', true);
-            $('#query_user').attr('readonly', true);
-            $('#query_pwd').attr('readonly', true);
-            $('#query_path').attr('readonly', true);
-
-            $('input[type=radio][name=radio_select]').change(function () {
-                if (this.value == 'press') {
-                    $('#query_ip').attr('readonly', true);
-                    $('#query_user').attr('readonly', true);
-                    $('#query_pwd').attr('readonly', true);
-                    $('#query_path').attr('readonly', true);
-
-                    $('#qo_qps').attr('readonly', false);
-                    $('#qo_press_time').attr('readonly', false);
-                }
-                else if (this.value == 'longdiff') {
-                    $('#qo_qps').attr('readonly', true);
-                    $('#qo_press_time').attr('readonly', true);
-
-                    $('#query_ip').attr('readonly', false);
-                    $('#query_user').attr('readonly', false);
-                    $('#query_pwd').attr('readonly', false);
-                    $('#query_path').attr('readonly', false);
-                }
-            });
-
-        });
 
         //goto result detail
         $('#taskId').click(function () {

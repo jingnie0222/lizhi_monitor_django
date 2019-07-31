@@ -82,7 +82,19 @@ class ResultDetail(models.Model):
     status = models.IntegerField(default=0)
 
 
-
+# status: 0 未解决 1 已解决 2 无问题
+# precision: 0 错误case   1 需要改进的case  2 效果正常的case
+class Similarity(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    query_id = models.AutoField(primary_key=True)
+    query = models.CharField(max_length=500, default="")
+    similarity = models.CharField(max_length=20, default="")
+    sg_res = models.CharField(max_length=1000, default="")
+    bd_res = models.CharField(max_length=1000, default="")
+    sg_pic = models.CharField(max_length=500, default="")
+    bd_pic = models.CharField(max_length=500, default="")
+    precision = models.IntegerField(default=0)
+    status = models.IntegerField(default=0)
 
 
 

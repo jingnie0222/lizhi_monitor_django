@@ -80,17 +80,35 @@ def get_static_summary(task_id):
         print("[get_static_summary]:%s" % err)
 
 
-
-
 def lizhiResDetail_bak(request, task_id):
     qf_sg_ft_sg, qf_sg_ft_bd, qf_bd_ft_sg, qf_bd_ft_bd, sg_count, bd_count = get_static_summary(task_id)
 
     allResult = models.ResultDetail.objects.filter(task_id=task_id)
 
-    return render(request, 'lizhi/lizhi_res_detail_bak.html',
-                  {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
-                   'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
-                   'sg_count':sg_count , 'bd_count':bd_count, 'all_res':allResult})
+    # 适用于结果筛选异步post刷新
+    # return render(request, 'lizhi/lizhi_res_detail_bak.html',
+    #               {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
+    #                'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
+    #                'sg_count':sg_count , 'bd_count':bd_count, 'all_res':allResult})
+
+
+    if request.method == 'GET':
+        page_id = request.GET.get('page', '')
+        if page_id == '':
+            current_page = 1
+        else:
+            current_page = int(page_id)
+
+        page_obj = pagination.Page(current_page, len(allResult), 50, 10)
+        data = allResult[page_obj.start:page_obj.end]
+        page_str = page_obj.page_str("/lizhi/result/result_detail_" + task_id + ".html?page=")
+
+        return render(request, 'lizhi/lizhi_res_detail_bak2.html',
+                      {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
+                       'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
+                       'sg_count': sg_count, 'bd_count': bd_count, 'all_res': data,
+                       'page_str': page_str})
+
 
 #@pysnooper.snoop()
 def result_filter(request):
@@ -104,11 +122,6 @@ def result_filter(request):
     sg_res_type = request.POST.get('sg_first_res')
     bd_res_type = request.POST.get('bd_first_res')
     task_id = request.POST.get('task_id')
-
-    # query_from = request.GET.get('query_from')
-    # sg_res_type = request.GET.get('sg_first_res')
-    # bd_res_type = request.GET.get('bd_first_res')
-    # task_id = request.GET.get('task_id')
 
     print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
 
@@ -151,6 +164,77 @@ def result_filter(request):
 
 
 # @auth
+
+
+# def result_filter(request, task_id):
+#     print("11111111111111")
+#     qf_sg_ft_sg, qf_sg_ft_bd, qf_bd_ft_sg, qf_bd_ft_bd, sg_count, bd_count = get_static_summary(task_id)
+#
+#
+#     query_from = request.GET.get('qf', 'ALL')
+#     sg_res_type = request.GET.get('sg', 'ALL')
+#     bd_res_type = request.GET.get('bd', 'ALL')
+#
+#     print("query_from=%s, sg=%s, bd=%s, task_id = %s" % (query_from, sg_res_type, bd_res_type, task_id))
+#
+#     try:
+#         if query_from == 'All' and sg_res_type == 'All' and bd_res_type == 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id)
+#
+#         elif query_from == 'All' and sg_res_type == 'All' and bd_res_type != 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(bd_res_type=bd_res_type)
+#
+#         elif query_from == 'All' and sg_res_type !=  'All' and bd_res_type == 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(sg_res_type=sg_res_type)
+#
+#         elif query_from == 'All' and sg_res_type !=  'All' and bd_res_type != 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+#
+#         elif query_from != 'All' and sg_res_type == 'All' and bd_res_type == 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from)
+#
+#         elif query_from != 'All' and sg_res_type == 'All' and bd_res_type != 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(bd_res_type=bd_res_type)
+#
+#         elif query_from != 'All' and sg_res_type != 'All' and bd_res_type == 'All':
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type)
+#
+#         else:
+#             selectResult = models.ResultDetail.objects.filter(task_id=task_id).filter(query_from=query_from).filter(sg_res_type=sg_res_type).filter(bd_res_type=bd_res_type)
+#
+#         if request.method == 'GET':
+#             page_id = request.GET.get('page', '')
+#             if page_id == '':
+#                 current_page = 1
+#             else:
+#                 current_page = int(page_id)
+#
+#             page_obj = pagination.Page(current_page, len(allResult), 50, 10)
+#             data = selectResult[page_obj.start:page_obj.end]
+#             page_str = page_obj.page_str("/lizhi/result/result_detail_" + task_id + ".html?qf=" + query_from + '&sg=' + sg_res_type + '&bd=' + bd_res_type + "&page=")
+#
+#             return render(request, 'lizhi/lizhi_res_detail_bak2.html',
+#                           {'qf_sg_ft_sg': qf_sg_ft_sg, 'qf_sg_ft_bd': qf_sg_ft_bd,
+#                            'qf_bd_ft_sg': qf_bd_ft_sg, 'qf_bd_ft_bd': qf_bd_ft_bd,
+#                            'sg_count': sg_count, 'bd_count': bd_count, 'all_res': data,
+#                            'page_str': page_str})
+#
+#
+#         #对象序列化，转化为json
+#         ret['data'] = json.loads(serializers.serialize('json', selectResult))
+#
+#     except Exception as e:
+#         print(e)
+#         print(sys.stderr, sys.exc_info()[0], sys.exc_info()[1])
+#
+#     return HttpResponse(json.dumps(ret))
+
+
+
+
+
+
+
 
 def debug(request):
     user_id = "zhangjingjun"

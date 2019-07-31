@@ -66,7 +66,10 @@ class Page:
         page_list.append(prev)
 
         for i in range(int(start_index),int(end_index)):
-            temp = '<li class="page-item"><a class="page-link" href=%s%s>%s</a></li>' % (base_url, i, i)
+            if self.current_page == i:
+                temp = '<li class="page-item active"><a class="page-link" href=%s%s>%s</a></li>' % (base_url, i, i)
+            else:
+                temp = '<li class="page-item"><a class="page-link" href=%s%s>%s</a></li>' % (base_url, i, i)
             page_list.append(temp)
 
         if self.current_page == self.total_count:

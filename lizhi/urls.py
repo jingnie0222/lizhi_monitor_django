@@ -27,9 +27,11 @@ app_name = 'lizhi'
 urlpatterns = [
     # debug
     re_path(r'^home/$', views.lizhiHome),
-    re_path(r'^result/result_detail_(?P<task_id>\d+).html$', views.lizhiResDetail_bak),
-    #re_path(r'^result/result_detail_(?P<task_id>\d+).html$', views.lizhiResDetail),
-    re_path(r'^result/filter$', views.result_filter),
+    #re_path(r'^result/result_detail_(?P<task_id>\d+).html$', views.lizhiResDetail_bak),  #post用
+    re_path(r'^result/result_detail_(?P<task_id>\d+).html/', views.lizhiResDetail_bak),
+    re_path(r'^result/filter$', views.result_filter)  #post异步请求使用
+    #re_path(r'^result/result_detail_(?P<task_id>\d+).html/$', views.result_filter),
+    #re_path(r'^result?$', views.result_filter),
     # re_path(r'^debug/del$', views.debug_del),
     # re_path(r'^debug/save$', views.debug_save),
     # re_path(r'^debug/diff$', views.debug_diff),

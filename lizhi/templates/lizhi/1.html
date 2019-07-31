@@ -1,0 +1,22 @@
+<html>
+<head>
+</head>
+
+<body>
+    <input id='a' />
+    <input id='b' />
+    <input id='c' />
+    <button><a target="_blank" id="query_btn" style="color:black"><i class="fa fa-fw fa-lg fa-check-circle"></i>Query</ a></button>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script>
+        $('#query_btn').click(function() {
+            //得到input的值
+            var a = $("#a").val();
+            var b = $("#b").val();
+            var c = $("#c").val();
+            $("#query_btn").attr("href", "/test?a=" + a + '&b=' + b + '&c=' + c);
+
+        });
+    </script>
+</body>
+</html>
