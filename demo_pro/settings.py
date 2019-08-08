@@ -95,7 +95,7 @@ DATABASES = {
         'NAME': 'lizhimonitor',
         'USER': 'root',
         'PASSWORD': 'lzxg@webqa',
-        'HOST': '10.144.96.115',
+        'HOST': 'host_ip',
         'PORT': '3306',
         'OPTIONS': {
             'autocommit': True,
